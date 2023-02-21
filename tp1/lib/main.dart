@@ -20,11 +20,67 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
+  final List<Map<String, dynamic>> _allMedias = [
+    {"id": 1, "name": "Harry Potter", "Category": "livre", "aime": false, "data": "Book about Harry Potter"},
+    {"id": 2, "name": "Eragon", "Category": "livre", "aime": false, "data": "Book about Eragon"},
+    {"id": 3, "name": "Basket", "Category": "sport", "aime": false, "data": "Basket is a team sport"},
+    {"id": 4, "name": "Avatar 2", "Category": "film", "aime": false, "data": "Second film about blue aliens"},
+    {"id": 5, "name": "Star wars", "Category": "film", "aime": false, "data": "All is in the name"},
+    {"id": 6, "name": "Compilation coupe du monde", "Category": "sport", "aime": false, "data": "You really care about that sport?"},
+    {"id": 7, "name": "Jane Eyre", "Category": "livre", "aime": false, "data": "An amazing english romance book"},
+    {"id": 8, "name": "Bienvenue chez les chtis", "Category": "film", "aime": false, "data": "Welcome to the North of France!"},
+    {"id": 9, "name": "Hockey", "Category": "sport", "aime": false, "data": "A cool sport"},
+    {"id": 10, "name": "Les 10 petits nègres", "Category": "livre", "aime": false, "data": "A scary book about crimes"},
+  ];
   bool? checkedValue_book = true;
   bool? checkedValue_films = true;
   bool? checkedValue_sports = true;
+  bool? checkedValue_aimes = false;
   var number_like = 0;
   List<bool> is_liked = [false, false, false, false, false, false, false, false, false, false];
+
+  // This list holds the data for the list view
+  List<Map<String, dynamic>> _foundMedias = [];
+  @override
+  initState() {
+    // at the beginning, all users are shown
+    _foundMedias = _allMedias;
+    super.initState();
+  }
+
+  // This function is called whenever the text field changes
+  void _runFilter() {
+    List<Map<String, dynamic>> results = [];
+    if (checkedValue_book == true) {
+      results = _allMedias
+          .where((media) =>
+              media["Category"].toLowerCase().contains("livre"))
+          .toList();
+    }
+    if (checkedValue_films == true) {
+      results += _allMedias
+          .where((media) =>
+              media["Category"].toLowerCase().contains("film"))
+          .toList();
+    }
+    if (checkedValue_sports == true) {
+      results += _allMedias
+          .where((media) =>
+              media["Category"].toLowerCase().contains("sport"))
+          .toList();
+    }
+    if (checkedValue_aimes == true) {
+      results = results
+          .where((media) =>
+              media["aime"])
+          .toList();
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundMedias = results;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +123,7 @@ class _NavigationExampleState extends State<NavigationExample> {
               onChanged: (newValue) {
                 setState(() {
                   checkedValue_book = newValue;
+                  _runFilter();
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -77,6 +134,7 @@ class _NavigationExampleState extends State<NavigationExample> {
               onChanged: (newValue) {
                 setState(() {
                   checkedValue_films = newValue;
+                  _runFilter();
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -87,200 +145,83 @@ class _NavigationExampleState extends State<NavigationExample> {
               onChanged: (newValue) {
                 setState(() {
                   checkedValue_sports = newValue;
+                  _runFilter();
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[0]){
-                    dislike_media(0);
-                  } else {
-                      like_media(0);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 1 item'),
-                ),
-              ),
+            CheckboxListTile(
+              title: Text("Medias aimés"),
+              value: checkedValue_aimes,
+              onChanged: (newValue) {
+                setState(() {
+                  checkedValue_aimes = newValue;
+                  _runFilter();
+                });
+              },
+              controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[1]){
-                    dislike_media(1);
-                  } else {
-                      like_media(1);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 2 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[2]){
-                    dislike_media(2);
-                  } else {
-                      like_media(2);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 3 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[3]){
-                    dislike_media(3);
-                  } else {
-                      like_media(3);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 4 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[4]){
-                    dislike_media(4);
-                  } else {
-                      like_media(4);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 5 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[5]){
-                    dislike_media(5);
-                  } else {
-                      like_media(5);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 6 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[6]){
-                    dislike_media(6);
-                  } else {
-                      like_media(6);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 7 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[7]){
-                    dislike_media(7);
-                  } else {
-                      like_media(7);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 8 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[8]){
-                    dislike_media(8);
-                  } else {
-                      like_media(8);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 9 item'),
-                ),
-              ),
-            ),
-            Card(clipBehavior: Clip.hardEdge,
-              color: Colors.grey,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  debugPrint('Card tapped.');
-                  if(is_liked[9]){
-                    dislike_media(9);
-                  } else {
-                      like_media(9);
-                  }
-                },
-                child: const SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Text('This is 10 item'),
-                ),
-              ),
-            ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _foundMedias.length,
+                      itemBuilder: (context, index) => Card(
+                        key: ValueKey(_foundMedias[index]["id"]),
+                        color: Colors.amberAccent,
+                        elevation: 4,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: ListTile(
+                          leading: IconButton(
+                                icon: _foundMedias[index]["aime"]
+                                ? Icon(Icons.favorite)
+                                : Icon(
+                                Icons.favorite_border,
+                                ),
+                                onPressed: () {
+                                  change_like(index);
+                                  setState(() {
+                                     _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
+                                      });
+                                 }
+                          ),
+                          title: TextButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text("More data"),
+                                    content: Text(_foundMedias[index]["data"]),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                        },
+                                              child: Container(
+                                                color: Colors.green,
+                                                padding: const EdgeInsets.all(14),
+                                                child: const Text("Got it!"),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                    );
+                                  }, 
+                              child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(_foundMedias[index]['name'],
+                                      style: TextStyle(
+                                      color: Colors.black,
+                                    ),),
+                                Icon(Icons.more_horiz,
+                                color: Colors.black)
+                              ],
+                            ),
+                          ),
+                      subtitle: Text(
+                              '${_foundMedias[index]['Category']}'),
+                        ),
+                      ),
+                    )
           ],
         ),
         Container(
@@ -300,13 +241,19 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
+  void change_like(var index) {
+    if(_foundMedias[index]["aime"]){
+        dislike_media(index);
+      } else {
+        like_media(index);
+    }
+  }
+
   void like_media(var index) {
       number_like++;
-      is_liked[index] = true;
   }
 
   void dislike_media(var index) {
     number_like--;
-    is_liked[index] = false;
   }
 }
