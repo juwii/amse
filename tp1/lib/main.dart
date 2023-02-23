@@ -37,7 +37,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   bool? checkedValue_sports = true;
   bool? checkedValue_aimes = false;
   var number_like = 0;
-  List<bool> is_liked = [false, false, false, false, false, false, false, false, false, false];
+  bool isLoaded = false;
 
   // This list holds the data for the list view
   List<Map<String, dynamic>> _foundMedias = [];
@@ -84,6 +84,36 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
+    if(!isLoaded) {
+    Future.delayed(Duration.zero, () {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Welcome to MyBibliotheque !"),
+            content: Text("Let's start discovering new medias!"),
+            icon: Icon(Icons.celebration),
+            actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                isLoaded = true;
+              },
+              child: Container(
+                color: Colors.green,
+                padding: const EdgeInsets.all(14),
+                child: const Text("Got it!",
+                style: TextStyle(
+                  color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            ],
+            )
+          );
+    }
+    );
+    }
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -110,12 +140,12 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: <Widget>[
         Container(
-          color: Colors.red,
+          color: Colors.grey,
           alignment: Alignment.center,
           child: Text('Nombre de médias aimés : $number_like'),
         ),
        ListView(
-          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
           children: [
             CheckboxListTile(
               title: Text("Livres"),
@@ -161,64 +191,94 @@ class _NavigationExampleState extends State<NavigationExample> {
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
+                  
                   ListView.builder(
                       shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const PageScrollPhysics(),
                       itemCount: _foundMedias.length,
-                      itemBuilder: (context, index) => Card(
-                        key: ValueKey(_foundMedias[index]["id"]),
-                        color: Colors.amberAccent,
-                        elevation: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          leading: IconButton(
-                                icon: _foundMedias[index]["aime"]
-                                ? Icon(Icons.favorite)
-                                : Icon(
-                                Icons.favorite_border,
-                                ),
-                                onPressed: () {
-                                  change_like(index);
-                                  setState(() {
-                                     _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
-                                      });
-                                 }
-                          ),
-                          title: TextButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (ctx) => AlertDialog(
-                                    title: const Text("More data"),
-                                    content: Text(_foundMedias[index]["data"]),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(ctx).pop();
-                                        },
-                                              child: Container(
-                                                color: Colors.green,
-                                                padding: const EdgeInsets.all(14),
-                                                child: const Text("Got it!"),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                    );
-                                  }, 
-                              child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(_foundMedias[index]['name'],
-                                      style: TextStyle(
-                                      color: Colors.black,
-                                    ),),
-                                Icon(Icons.more_horiz,
-                                color: Colors.black)
-                              ],
+                      itemBuilder: (context, index) => Container(
+                        height: 200,
+                        
+                        child: Card(
+                          key: ValueKey(_foundMedias[index]["id"]),
+                          elevation: 4,
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  colors: [
+                                    Colors.grey,
+                                    Colors.blue,
+                                  ],
+                                  begin: FractionalOffset(0.0, 0.0),
+                                  end: FractionalOffset(1.5, 0.0),
+                                  stops: [0.0, 1.5],
+                                  tileMode: TileMode.clamp),
                             ),
+                            child: ListTile(
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: _foundMedias[index]["aime"]
+                                  ? Icon(Icons.favorite)
+                                  : const Icon(
+                                  Icons.favorite_border,
+                                  ),
+                                  onPressed: () {
+                                    change_like(index);
+                                    setState(() {
+                                       _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
+                                        });
+                                   }
+                                ),
+                              ],
+                              ),
+                            
+                            title: TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: const Text("More data"),
+                                      content: Text(_foundMedias[index]["data"]),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(ctx).pop();
+                                          },
+                                                child: Container(
+                                                  color: Colors.green,
+                                                  padding: const EdgeInsets.all(14),
+                                                  child: const Text("Got it!",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                      );
+                                    }, 
+                                child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(_foundMedias[index]['name'],
+                                        style: TextStyle(
+                                        color: Colors.black,
+                                      ),),
+                                  Icon(Icons.more_horiz,
+                                  color: Colors.black)
+                                ],
+                              ),
+                            ),
+                        subtitle: Text(
+                                '${_foundMedias[index]['Category']}'),
                           ),
-                      subtitle: Text(
-                              '${_foundMedias[index]['Category']}'),
+                          ),
                         ),
                       ),
                     )
