@@ -141,16 +141,51 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: <Widget>[
         Container(
-          color: Colors.grey,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.grey,
+                Color.fromARGB(255, 85, 96, 105),
+              ],
+            )
+          ),
           alignment: Alignment.center,
-          child: Text('Nombre de médias aimés : $number_like'),
+          
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            
+            children: <Widget> [
+              Icon(Icons.menu_book, size: 80),
+              SizedBox(height: 100),
+              Text(
+                "MyBibliotheque",
+                style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              )
+              ),
+              SizedBox(height: 100),
+              Text(
+                'Nombre de médias aimés : $number_like',
+                style: TextStyle(
+                fontSize: 20,
+                )
+                ),
+              ]
+          ),
         ),
        ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
-            Column()
-            //CheckboxListTile(
-              title: Text("Livres"),
+              CheckboxListTile(
+              title: Text("Livres",
+               style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_book,
               onChanged: (newValue) {
                 setState(() {
@@ -159,9 +194,15 @@ class _NavigationExampleState extends State<NavigationExample> {
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-           // ),
+            ),
             CheckboxListTile(
-              title: Text("Films"),
+              title: Text(
+                "Films",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_films,
               onChanged: (newValue) {
                 setState(() {
@@ -172,7 +213,12 @@ class _NavigationExampleState extends State<NavigationExample> {
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
             CheckboxListTile(
-              title: Text("Sports"),
+              title: Text("Sports",
+              style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_sports,
               onChanged: (newValue) {
                 setState(() {
@@ -183,7 +229,12 @@ class _NavigationExampleState extends State<NavigationExample> {
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
             CheckboxListTile(
-              title: Text("Medias aimés"),
+              title: Text("Medias aimés",
+               style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_aimes,
               onChanged: (newValue) {
                 setState(() {
@@ -193,119 +244,142 @@ class _NavigationExampleState extends State<NavigationExample> {
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
+            
+          
+            ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: const PageScrollPhysics(),
+                itemCount: _foundMedias.length,
+                itemBuilder: (context, index) => Container(
+                  height: 200,
                   
-                  ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const PageScrollPhysics(),
-                      itemCount: _foundMedias.length,
-                      itemBuilder: (context, index) => Container(
-                        height: 200,
-                        
-                        child: Card(
-                          key: ValueKey(_foundMedias[index]["id"]),
-                          elevation: 4,
-                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    Colors.grey,
-                                    Colors.blue,
-                                  ],
-                                  begin: FractionalOffset(0.0, 0.0),
-                                  end: FractionalOffset(1.5, 0.0),
-                                  stops: [0.0, 1.5],
-                                  tileMode: TileMode.clamp),
-                            ),
-                            child: ListTile(
-                            leading: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                    icon: _foundMedias[index]["aime"]
-                                    ? Icon(
-                                      Icons.favorite,
-                                      size: 40
-                                      )
-                                    : const Icon(
-                                    Icons.favorite_border,
-                                    size: 40,
-                                    ),
-                                    onPressed: () {
-                                      change_like(index);
-                                      setState(() {
-                                          _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
-                                          });
-                                    }
-                                  
-                                ),
-                              ],
-                            ),
-                            title: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(_foundMedias[index]['name'], 
-                                  maxLines: 3,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                ),
-                                Text('${_foundMedias[index]['Category']}',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontStyle: FontStyle.italic,
-                                  ),)
-                              ],
-                            ),
-                          
-                          onLongPress: () {
-                            HapticFeedback.heavyImpact();
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => AlertDialog(
-                                title: const Text("More data"),
-                                content: Text(_foundMedias[index]["data"]),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(ctx).pop();
-                                    },
-                                      child: Container(
-                                        color: Colors.green,
-                                        padding: const EdgeInsets.all(14),
-                                        child: const Text("Got it!",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                  child: Card(
+                    key: ValueKey(_foundMedias[index]["id"]),
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              Colors.grey,
+                              Colors.blue,
+                            ],
+                            begin: FractionalOffset(0.0, 0.0),
+                            end: FractionalOffset(1.5, 0.0),
+                            stops: [0.0, 1.5],
+                            tileMode: TileMode.clamp),
+                      ),
+                      child: ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                              icon: _foundMedias[index]["aime"]
+                              ? Icon(
+                                Icons.favorite,
+                                size: 40
+                                )
+                              : const Icon(
+                              Icons.favorite_border,
+                              size: 40,
+                              ),
+                              onPressed: () {
+                                change_like(index);
+                                setState(() {
+                                    _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
+                                    });
+                              }
+                            
                           ),
-                  ),
-                          
-                ),
-              ),
-            )
-          ],
+                        ],
+                      ),
+                      title: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(_foundMedias[index]['name'], 
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )
+                          ),
+                          Text('${_foundMedias[index]['Category']}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontStyle: FontStyle.italic,
+                            ),)
+                        ],
+                      ),
+                    
+                    onLongPress: () {
+                      HapticFeedback.heavyImpact();
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text("More data"),
+                          content: Text(_foundMedias[index]["data"]),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                                child: Container(
+                                  color: Colors.green,
+                                  padding: const EdgeInsets.all(14),
+                                  child: const Text("Got it!",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+                    
+          ),
         ),
+      )
+    ],
+  ),
         Container(
-          color: Colors.grey,
+          //color: Colors.grey,
           alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.grey,
+                Color.fromARGB(255, 85, 96, 105),
+              ],
+            )
+          ),
           child: ListView(
           shrinkWrap: true,
           children:  <Widget>[
-            new Center(child: Text("Media app")),
-            new Center(child: Text("Developers: Cédric Prast and Juliette Létondot")),
-            new Center(child: Text("v1.0")),
-            new Center(child: Text("@Copyrights IMT company")),
+            new Center(child: Text("MyBibliotheque", style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),)),
+            new Center(child: Text("Developers: Cédric Prast and Juliette Létondot",style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),)),
+            new Center(child: Text("v1.0", style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),),),
+            new Center(child: Text("@Copyrights IMT company", style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),), ),
           ],
         ),
         ),
