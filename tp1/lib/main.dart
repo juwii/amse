@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(const ExampleApp());
 
@@ -147,7 +148,8 @@ class _NavigationExampleState extends State<NavigationExample> {
        ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
-            CheckboxListTile(
+            Column()
+            //CheckboxListTile(
               title: Text("Livres"),
               value: checkedValue_book,
               onChanged: (newValue) {
@@ -157,7 +159,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-            ),
+           // ),
             CheckboxListTile(
               title: Text("Films"),
               value: checkedValue_films,
@@ -222,66 +224,76 @@ class _NavigationExampleState extends State<NavigationExample> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  icon: _foundMedias[index]["aime"]
-                                  ? Icon(Icons.favorite)
-                                  : const Icon(
-                                  Icons.favorite_border,
-                                  ),
-                                  onPressed: () {
-                                    change_like(index);
-                                    setState(() {
-                                       _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
-                                        });
-                                   }
+                                    icon: _foundMedias[index]["aime"]
+                                    ? Icon(
+                                      Icons.favorite,
+                                      size: 40
+                                      )
+                                    : const Icon(
+                                    Icons.favorite_border,
+                                    size: 40,
+                                    ),
+                                    onPressed: () {
+                                      change_like(index);
+                                      setState(() {
+                                          _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
+                                          });
+                                    }
+                                  
                                 ),
                               ],
-                              ),
-                            
-                            title: TextButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (ctx) => AlertDialog(
-                                      title: const Text("More data"),
-                                      content: Text(_foundMedias[index]["data"]),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(ctx).pop();
-                                          },
-                                                child: Container(
-                                                  color: Colors.green,
-                                                  padding: const EdgeInsets.all(14),
-                                                  child: const Text("Got it!",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                      );
-                                    }, 
-                                child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(_foundMedias[index]['name'],
-                                        style: TextStyle(
-                                        color: Colors.black,
-                                      ),),
-                                  Icon(Icons.more_horiz,
-                                  color: Colors.black)
-                                ],
-                              ),
                             ),
-                        subtitle: Text(
-                                '${_foundMedias[index]['Category']}'),
+                            title: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(_foundMedias[index]['name'], 
+                                  maxLines: 3,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                                ),
+                                Text('${_foundMedias[index]['Category']}',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontStyle: FontStyle.italic,
+                                  ),)
+                              ],
+                            ),
+                          
+                          onLongPress: () {
+                            HapticFeedback.heavyImpact();
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: const Text("More data"),
+                                content: Text(_foundMedias[index]["data"]),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                      child: Container(
+                                        color: Colors.green,
+                                        padding: const EdgeInsets.all(14),
+                                        child: const Text("Got it!",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                          ),
-                        ),
-                      ),
-                    )
+                  ),
+                          
+                ),
+              ),
+            )
           ],
         ),
         Container(
