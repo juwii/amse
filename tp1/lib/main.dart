@@ -22,16 +22,16 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   final List<Map<String, dynamic>> _allMedias = [
-    {"id": 1, "name": "Harry Potter", "Category": "livre", "aime": false, "data": "Book about Harry Potter"},
-    {"id": 2, "name": "Eragon", "Category": "livre", "aime": false, "data": "Book about Eragon"},
+    {"id": 1, "name": "Harry Potter", "Category": "book", "aime": false, "data": "Book about Harry Potter"},
+    {"id": 2, "name": "Eragon", "Category": "book", "aime": false, "data": "Book about Eragon"},
     {"id": 3, "name": "Basket", "Category": "sport", "aime": false, "data": "Basket is a team sport"},
     {"id": 4, "name": "Avatar 2", "Category": "film", "aime": false, "data": "Second film about blue aliens"},
     {"id": 5, "name": "Star wars", "Category": "film", "aime": false, "data": "All is in the name"},
     {"id": 6, "name": "Compilation coupe du monde", "Category": "sport", "aime": false, "data": "You really care about that sport?"},
-    {"id": 7, "name": "Jane Eyre", "Category": "livre", "aime": false, "data": "An amazing english romance book"},
+    {"id": 7, "name": "Jane Eyre", "Category": "book", "aime": false, "data": "An amazing english romance book"},
     {"id": 8, "name": "Bienvenue chez les chtis", "Category": "film", "aime": false, "data": "Welcome to the North of France!"},
     {"id": 9, "name": "Hockey", "Category": "sport", "aime": false, "data": "A cool sport"},
-    {"id": 10, "name": "Les 10 petits nègres", "Category": "livre", "aime": false, "data": "A scary book about crimes"},
+    {"id": 10, "name": "Les 10 petits nègres", "Category": "book", "aime": false, "data": "A scary book about crimes"},
   ];
   bool? checkedValue_book = true;
   bool? checkedValue_films = true;
@@ -55,7 +55,7 @@ class _NavigationExampleState extends State<NavigationExample> {
     if (checkedValue_book == true) {
       results = _allMedias
           .where((media) =>
-              media["Category"].toLowerCase().contains("livre"))
+              media["Category"].toLowerCase().contains("book"))
           .toList();
     }
     if (checkedValue_films == true) {
@@ -168,7 +168,7 @@ class _NavigationExampleState extends State<NavigationExample> {
               ),
               SizedBox(height: 100),
               Text(
-                'Nombre de médias aimés : $number_like',
+                'Number of liked medias: $number_like',
                 style: TextStyle(
                 fontSize: 20,
                 )
@@ -180,7 +180,7 @@ class _NavigationExampleState extends State<NavigationExample> {
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
               CheckboxListTile(
-              title: Text("Livres",
+              title: Text("Books",
                style: TextStyle(
                   fontSize: 17,
                   fontStyle: FontStyle.italic,
@@ -229,7 +229,7 @@ class _NavigationExampleState extends State<NavigationExample> {
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
             CheckboxListTile(
-              title: Text("Medias aimés",
+              title: Text("Liked medias",
                style: TextStyle(
                   fontSize: 17,
                   fontStyle: FontStyle.italic,
