@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(const ExampleApp());
 
@@ -21,23 +22,23 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   final List<Map<String, dynamic>> _allMedias = [
-    {"id": 1, "name": "Harry Potter", "Category": "livre", "aime": false, "data": "Book about Harry Potter"},
-    {"id": 2, "name": "Eragon", "Category": "livre", "aime": false, "data": "Book about Eragon"},
+    {"id": 1, "name": "Harry Potter", "Category": "book", "aime": false, "data": "Book about Harry Potter"},
+    {"id": 2, "name": "Eragon", "Category": "book", "aime": false, "data": "Book about Eragon"},
     {"id": 3, "name": "Basket", "Category": "sport", "aime": false, "data": "Basket is a team sport"},
     {"id": 4, "name": "Avatar 2", "Category": "film", "aime": false, "data": "Second film about blue aliens"},
     {"id": 5, "name": "Star wars", "Category": "film", "aime": false, "data": "All is in the name"},
     {"id": 6, "name": "Compilation coupe du monde", "Category": "sport", "aime": false, "data": "You really care about that sport?"},
-    {"id": 7, "name": "Jane Eyre", "Category": "livre", "aime": false, "data": "An amazing english romance book"},
+    {"id": 7, "name": "Jane Eyre", "Category": "book", "aime": false, "data": "An amazing english romance book"},
     {"id": 8, "name": "Bienvenue chez les chtis", "Category": "film", "aime": false, "data": "Welcome to the North of France!"},
     {"id": 9, "name": "Hockey", "Category": "sport", "aime": false, "data": "A cool sport"},
-    {"id": 10, "name": "Les 10 petits nègres", "Category": "livre", "aime": false, "data": "A scary book about crimes"},
+    {"id": 10, "name": "Les 10 petits nègres", "Category": "book", "aime": false, "data": "A scary book about crimes"},
   ];
   bool? checkedValue_book = true;
   bool? checkedValue_films = true;
   bool? checkedValue_sports = true;
   bool? checkedValue_aimes = false;
   var number_like = 0;
-  List<bool> is_liked = [false, false, false, false, false, false, false, false, false, false];
+  bool isLoaded = false;
 
   // This list holds the data for the list view
   List<Map<String, dynamic>> _foundMedias = [];
@@ -54,7 +55,7 @@ class _NavigationExampleState extends State<NavigationExample> {
     if (checkedValue_book == true) {
       results = _allMedias
           .where((media) =>
-              media["Category"].toLowerCase().contains("livre"))
+              media["Category"].toLowerCase().contains("book"))
           .toList();
     }
     if (checkedValue_films == true) {
@@ -84,6 +85,36 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
+    if(!isLoaded) {
+    Future.delayed(Duration.zero, () {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Welcome to MyBibliotheque !"),
+            content: Text("Let's start discovering new medias!"),
+            icon: Icon(Icons.celebration),
+            actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                isLoaded = true;
+              },
+              child: Container(
+                color: Colors.green,
+                padding: const EdgeInsets.all(14),
+                child: const Text("Got it!",
+                style: TextStyle(
+                  color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            ],
+            )
+          );
+    }
+    );
+    }
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -110,15 +141,51 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: <Widget>[
         Container(
-          color: Colors.red,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.grey,
+                Color.fromARGB(255, 85, 96, 105),
+              ],
+            )
+          ),
           alignment: Alignment.center,
-          child: Text('Nombre de médias aimés : $number_like'),
+          
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            
+            children: <Widget> [
+              Icon(Icons.menu_book, size: 80),
+              SizedBox(height: 100),
+              Text(
+                "MyBibliotheque",
+                style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              )
+              ),
+              SizedBox(height: 100),
+              Text(
+                'Number of liked medias: $number_like',
+                style: TextStyle(
+                fontSize: 20,
+                )
+                ),
+              ]
+          ),
         ),
        ListView(
-          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
           children: [
-            CheckboxListTile(
-              title: Text("Livres"),
+              CheckboxListTile(
+              title: Text("Books",
+               style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_book,
               onChanged: (newValue) {
                 setState(() {
@@ -129,7 +196,13 @@ class _NavigationExampleState extends State<NavigationExample> {
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
             CheckboxListTile(
-              title: Text("Films"),
+              title: Text(
+                "Films",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_films,
               onChanged: (newValue) {
                 setState(() {
@@ -140,7 +213,12 @@ class _NavigationExampleState extends State<NavigationExample> {
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
             CheckboxListTile(
-              title: Text("Sports"),
+              title: Text("Sports",
+              style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_sports,
               onChanged: (newValue) {
                 setState(() {
@@ -151,7 +229,12 @@ class _NavigationExampleState extends State<NavigationExample> {
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
             CheckboxListTile(
-              title: Text("Medias aimés"),
+              title: Text("Liked medias",
+               style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                )
+                ),
               value: checkedValue_aimes,
               onChanged: (newValue) {
                 setState(() {
@@ -161,79 +244,142 @@ class _NavigationExampleState extends State<NavigationExample> {
               },
               controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
             ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _foundMedias.length,
-                      itemBuilder: (context, index) => Card(
-                        key: ValueKey(_foundMedias[index]["id"]),
-                        color: Colors.amberAccent,
-                        elevation: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          leading: IconButton(
-                                icon: _foundMedias[index]["aime"]
-                                ? Icon(Icons.favorite)
-                                : Icon(
-                                Icons.favorite_border,
-                                ),
-                                onPressed: () {
-                                  change_like(index);
-                                  setState(() {
-                                     _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
-                                      });
-                                 }
-                          ),
-                          title: TextButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (ctx) => AlertDialog(
-                                    title: const Text("More data"),
-                                    content: Text(_foundMedias[index]["data"]),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(ctx).pop();
-                                        },
-                                              child: Container(
-                                                color: Colors.green,
-                                                padding: const EdgeInsets.all(14),
-                                                child: const Text("Got it!"),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                    );
-                                  }, 
-                              child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(_foundMedias[index]['name'],
-                                      style: TextStyle(
-                                      color: Colors.black,
-                                    ),),
-                                Icon(Icons.more_horiz,
-                                color: Colors.black)
-                              ],
-                            ),
-                          ),
-                      subtitle: Text(
-                              '${_foundMedias[index]['Category']}'),
-                        ),
+            
+          
+            ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: const PageScrollPhysics(),
+                itemCount: _foundMedias.length,
+                itemBuilder: (context, index) => Container(
+                  height: 200,
+                  
+                  child: Card(
+                    key: ValueKey(_foundMedias[index]["id"]),
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              Colors.grey,
+                              Colors.blue,
+                            ],
+                            begin: FractionalOffset(0.0, 0.0),
+                            end: FractionalOffset(1.5, 0.0),
+                            stops: [0.0, 1.5],
+                            tileMode: TileMode.clamp),
                       ),
-                    )
-          ],
+                      child: ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                              icon: _foundMedias[index]["aime"]
+                              ? Icon(
+                                Icons.favorite,
+                                size: 40
+                                )
+                              : const Icon(
+                              Icons.favorite_border,
+                              size: 40,
+                              ),
+                              onPressed: () {
+                                change_like(index);
+                                setState(() {
+                                    _foundMedias[index]["aime"] = !_foundMedias[index]["aime"];
+                                    });
+                              }
+                            
+                          ),
+                        ],
+                      ),
+                      title: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(_foundMedias[index]['name'], 
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )
+                          ),
+                          Text('${_foundMedias[index]['Category']}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontStyle: FontStyle.italic,
+                            ),)
+                        ],
+                      ),
+                    
+                    onLongPress: () {
+                      HapticFeedback.heavyImpact();
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text("More data"),
+                          content: Text(_foundMedias[index]["data"]),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                                child: Container(
+                                  color: Colors.green,
+                                  padding: const EdgeInsets.all(14),
+                                  child: const Text("Got it!",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+                    
+          ),
         ),
+      )
+    ],
+  ),
         Container(
-          color: Colors.grey,
+          //color: Colors.grey,
           alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.grey,
+                Color.fromARGB(255, 85, 96, 105),
+              ],
+            )
+          ),
           child: ListView(
           shrinkWrap: true,
           children:  <Widget>[
-            new Center(child: Text("Media app")),
-            new Center(child: Text("Developers: Cédric Prast and Juliette Létondot")),
-            new Center(child: Text("v1.0")),
-            new Center(child: Text("@Copyrights IMT company")),
+            new Center(child: Text("MyBibliotheque", style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),)),
+            new Center(child: Text("Developers: Cédric Prast and Juliette Létondot",style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),)),
+            new Center(child: Text("v1.0", style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),),),
+            new Center(child: Text("@Copyrights IMT company", style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),), ),
           ],
         ),
         ),
