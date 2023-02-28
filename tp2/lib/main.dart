@@ -5,6 +5,7 @@ import 'exercise_4.dart' as Exercice_4;
 import 'exercise_5a.dart' as Exercice_5a;
 import 'exercise_5b.dart' as Exercice_5b;
 import 'exercise_5c.dart' as Exercice_5c;
+import 'exercise_6.dart' as Exercice_6;
 
 void main() => runApp(TP2());
 
@@ -37,7 +38,7 @@ List Exercices = [
       title: 'Exercice 3',
       subtitle: 'Printing of a "tuile"',
       buildFunc: (context) => Exercice_4.DisplayTileWidget()),
-  Exercice(    
+  Exercice(
       title: 'Exercice 4',
       subtitle: 'Printing of a "tuile"',
       buildFunc: (context) => Exercice_4.DisplayTileWidget()),
@@ -53,6 +54,10 @@ List Exercices = [
       title: 'Exercice 5c',
       subtitle: 'Configure the CroppedImage',
       buildFunc: (context) => Exercice_5c.configureCropImage()),
+  Exercice(
+      title: 'Exercice 6',
+      subtitle: 'Tile animation',
+      buildFunc: (context) => Exercice_6.PositionedTiles())
 ];
 
 class TP2_Exercices extends StatelessWidget {
