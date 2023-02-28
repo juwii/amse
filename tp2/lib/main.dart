@@ -4,6 +4,7 @@ import 'exercise_2.dart' as Exercice_2;
 import 'exercise_4.dart' as Exercice_4;
 import 'exercise_5a.dart' as Exercice_5a;
 import 'exercise_5b.dart' as Exercice_5b;
+import 'exercise_5c.dart' as Exercice_5c;
 
 void main() => runApp(TP2());
 
@@ -48,6 +49,10 @@ List Exercices = [
       title: 'Exercice 5b',
       subtitle: 'Fixed Grid of CroppedImage',
       buildFunc: (context) => Exercice_5b.DisplayGridCroppedImageWidget()),
+  Exercice(
+      title: 'Exercice 5c',
+      subtitle: 'Configure the CroppedImage',
+      buildFunc: (context) => Exercice_5c.configureCropImage()),
 ];
 
 class TP2_Exercices extends StatelessWidget {
