@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'print_picture.dart' as Exercice_1;
+import 'exercise_1.dart' as Exercice_1;
+import 'exercise_2.dart' as Exercice_2;
 import 'exercise_4.dart' as Exercice_4;
 
 void main() => runApp(TP2());
@@ -23,13 +24,16 @@ class Exercice {
 List Exercices = [
   Exercice(
       title: 'Exercice 1',
-      subtitle: 'Simple image',
+      subtitle: 'Display an image',
       buildFunc: (context) => Exercice_1.DisplayImageWidget()),
+  Exercice(
+      title: 'Exercice 2',
+      subtitle: 'Transform an image',
+      buildFunc: (context) => Exercice_2.SliderExample()),
   Exercice(
       title: 'Exercice 3',
       subtitle: 'Printing of a "tuile"',
-      buildFunc: (context) => Exercice_4.DisplayTileWidget()
-  )
+      buildFunc: (context) => Exercice_4.DisplayTileWidget())
 ];
 
 class TP2_Exercices extends StatelessWidget {

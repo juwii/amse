@@ -11,7 +11,7 @@ class DisplayImageWidget extends StatelessWidget {
         body: Center(
           child: Image.network(
             'https://picsum.photos/512/1024',
-            width: 350,
+            width: 400,
             fit: BoxFit.cover,
           ),
         ));
