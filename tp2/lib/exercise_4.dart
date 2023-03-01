@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
 class Tile {
-  Alignment alignment;
   Image img;
+  var widthFactor;
+  var heightFactor;
+  var x;  // coordinate of the crop in x axis
+  var y;  // coordinate of the crop in y axis
 
-  Tile({required this.img, required this.alignment});
+  Tile({required this.img, this.x, this.y, required this.widthFactor, required this.heightFactor});
 
   Widget croppedImageTile() {
     return FittedBox(
       fit: BoxFit.fill,
       child: ClipRect(
+        //clipper: 
         child: Container(
           child: Align(
-            alignment: alignment,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
+            alignment: Alignment(x,y),
+            widthFactor: widthFactor,
+            heightFactor: heightFactor,
             child: img,
           ),
         ),
@@ -24,7 +28,7 @@ class Tile {
 }
 
 Tile tile = new Tile(
-    img: Image.asset("assets/images/avatar.jpg"), alignment: Alignment(0, 0));
+    img: Image.asset("assets/images/avatar.jpg"), x: 1.0, y: 1.0, widthFactor: 0.25, heightFactor: 0.25);
 
 class DisplayTileWidget extends StatelessWidget {
   @override

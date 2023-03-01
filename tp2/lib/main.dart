@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'exercise_1.dart' as Exercice_1;
 import 'exercise_2.dart' as Exercice_2;
 import 'exercise_4.dart' as Exercice_4;
+import 'exercise_5a.dart' as Exercice_5a;
+import 'exercise_5b.dart' as Exercice_5b;
+import 'exercise_5c.dart' as Exercice_5c;
 
 void main() => runApp(TP2());
 
@@ -33,7 +36,23 @@ List Exercices = [
   Exercice(
       title: 'Exercice 3',
       subtitle: 'Printing of a "tuile"',
-      buildFunc: (context) => Exercice_4.DisplayTileWidget())
+      buildFunc: (context) => Exercice_4.DisplayTileWidget()),
+  Exercice(    
+      title: 'Exercice 4',
+      subtitle: 'Printing of a "tuile"',
+      buildFunc: (context) => Exercice_4.DisplayTileWidget()),
+  Exercice(
+      title: 'Exercice 5a',
+      subtitle: 'Grid of colored boxes',
+      buildFunc: (context) => Exercice_5a.DisplayGridViewWidget()),
+  Exercice(
+      title: 'Exercice 5b',
+      subtitle: 'Fixed Grid of CroppedImage',
+      buildFunc: (context) => Exercice_5b.DisplayGridCroppedImageWidget()),
+  Exercice(
+      title: 'Exercice 5c',
+      subtitle: 'Configure the CroppedImage',
+      buildFunc: (context) => Exercice_5c.configureCropImage()),
 ];
 
 class TP2_Exercices extends StatelessWidget {
