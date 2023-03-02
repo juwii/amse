@@ -21,13 +21,13 @@ class _configureCropImage extends State<configureCropImage> {
         ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GridView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             primary: false,
-            padding: const EdgeInsets.only(top: 0, bottom: 20, left: 70, right: 70),
+            padding: const EdgeInsets.only(top: 20, bottom: 20, left: 70, right: 70),
             itemCount: croppedImgConf.listCroppedImage!.length*croppedImgConf.listCroppedImage!.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: croppedImgConf.listCroppedImage!.length),
             itemBuilder: (BuildContext context, int index) { 
@@ -45,7 +45,7 @@ class _configureCropImage extends State<configureCropImage> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               )),
-              alignment: Alignment.bottomCenter
+              alignment: Alignment.center
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +64,7 @@ class _configureCropImage extends State<configureCropImage> {
                     );
                   },
                 ),
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 padding: const EdgeInsets.all(30),
               ),
               Container(
@@ -81,7 +81,7 @@ class _configureCropImage extends State<configureCropImage> {
                     );
                   },
                 ),
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 padding: const EdgeInsets.all(30),
               ),
             ]
