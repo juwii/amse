@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'exercise_4.dart';
 import 'exercise_5b.dart' as exercise_5b;
 
@@ -39,6 +40,7 @@ class _moveCropImage extends State<moveCropImage> {
   var coordFirstCard = [0,0];
   bool _gameStarted = true;
   bool isMixing = false;  // variable to determine if the tiles were just mixed
+  var numberMoves = 0;
 
   @override
   void initState() {
@@ -79,6 +81,7 @@ class _moveCropImage extends State<moveCropImage> {
               listCroppedImage[third_index][fourth_index];
           listCroppedImage[third_index][fourth_index] = temp;
           coordFirstCard = [third_index, fourth_index];
+          numberMoves++;
         }
       });
   }
@@ -89,8 +92,10 @@ class _moveCropImage extends State<moveCropImage> {
     _gameStarted = widget.gameStarted;
     isMixing = widget.isMixing;
 
-    // code executed while the user did not swap tiles
+    // code executed while the user did not swap tiles and reset
     if(!_gameStarted) {
+      coordSelectedCard = List.empty();
+      numberMoves = 0;
       _numberCrops = widget.numberCrops;
       img = widget.img;
       croppedImgConf = new exercise_5b.croppedImage(img,
@@ -104,12 +109,21 @@ class _moveCropImage extends State<moveCropImage> {
       coordFirstCard = widget.coordFirstCard;
     }
     
+    List<List<Tile>>? reslistCroppedImage;
+    exercise_5b.croppedImage res = new exercise_5b.croppedImage(img,
+        1 / _numberCrops,
+        1 / _numberCrops,
+        reslistCroppedImage);
+    if(listEquals(res.listCroppedImage, listCroppedImage)) {
+      print("gagné");
+    }
     
     return Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text("Number of moves: $numberMoves"),
             GridView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
