@@ -20,35 +20,39 @@ class _taquinState extends State<taquin> {
   late exercise_5b.croppedImage croppedImgConf;
   List<List<Tile>>? listCroppedImage;
   List<List<Tile>>? listCroppedImageMixed;
+  var coordFirstCard = [0, 0];
 
   List<List<Tile>>? mixTiles(List<List<Tile>>? listCroppedImage, int difficulty) {
     setState(() {
     int i = 0;
     listCroppedImageMixed = [...listCroppedImage!];
+    // generates random coordinates of a tile
+    Random random = new Random();
+    int x = random.nextInt(listCroppedImageMixed!.length);
+    int y = random.nextInt(listCroppedImageMixed!.length);
     while(i < difficulty) {
-      // generates random coordinates of a tile
-      Random random = new Random();
-      int x = random.nextInt(listCroppedImageMixed!.length);
-      int y = random.nextInt(listCroppedImageMixed!.length);
-      
+      Random random2 = new Random();
       // generates random moving
-      int j = random.nextInt(1);  // 0 : x moving, 1: y moving
+      int j = random2.nextInt(1);  // 0 : x moving, 1: y moving
       int d;
-      do {d = random.nextInt(2) - 1;} while(d == 0);   // moving = j + d
-
+      d = random2.nextInt(2);   // moving = j + d
+      if(d == 0) {d = -1;}
       if(j == 0 && (x+d)<listCroppedImageMixed!.length && (x+d)>=0) {
         var temp = listCroppedImageMixed![x][y];
         listCroppedImageMixed![x][y] =
             listCroppedImageMixed![x + d][y];
         listCroppedImageMixed![x + d][y] = temp;
+        x = x + d;
       } else if ((y+d)<listCroppedImageMixed!.length && (y+d)>=0){
         var temp = listCroppedImageMixed![x][y];
         listCroppedImageMixed![x][y] =
             listCroppedImageMixed![x][y + d];
         listCroppedImageMixed![x][y + d] = temp;
+        y = y + d;
       }
       i++;
     }
+    coordFirstCard = [x, y];
     });
   }
 
@@ -59,7 +63,7 @@ class _taquinState extends State<taquin> {
         1 / numberCrops,
         listCroppedImage);
     listCroppedImage = croppedImgConf.listCroppedImage;
-    taquinBoard = exercise_6b.moveCropImage(numberCrops, img, gameStarted, listCroppedImage);
+    taquinBoard = exercise_6b.moveCropImage(numberCrops, img, gameStarted, listCroppedImage, coordFirstCard, false);
   }
 
   @override
@@ -94,7 +98,7 @@ class _taquinState extends State<taquin> {
                               1 / (oldTaquin.getNumberCrops-1),
                               listCroppedImage);
                               listCroppedImage = croppedImgConf.listCroppedImage;
-                              taquinBoard = new exercise_6b.moveCropImage(oldTaquin.getNumberCrops-1, img, false, listCroppedImage);
+                              taquinBoard = new exercise_6b.moveCropImage(oldTaquin.getNumberCrops-1, img, false, listCroppedImage, coordFirstCard, false);
                               listCroppedImage = taquinBoard.listCroppedImage;
                           }
                         }
@@ -119,7 +123,7 @@ class _taquinState extends State<taquin> {
                               1 / (oldTaquin.getNumberCrops+1),
                               listCroppedImage);
                               listCroppedImage = croppedImgConf.listCroppedImage;
-                             taquinBoard = new exercise_6b.moveCropImage(oldTaquin.getNumberCrops+1, img, false, listCroppedImage);
+                             taquinBoard = new exercise_6b.moveCropImage(oldTaquin.getNumberCrops+1, img, false, listCroppedImage, coordFirstCard, false);
                              listCroppedImage = taquinBoard.listCroppedImage;
                           }
                         }
@@ -137,19 +141,20 @@ class _taquinState extends State<taquin> {
                 if(textButtonGame == "Start Game") {
                   textButtonGame = "Stop Game";
                   gameStarted = true;
-                  mixTiles(taquinBoard.listCroppedImage, 100);
+                  mixTiles(taquinBoard.listCroppedImage, 20);
                   var oldTaquin = taquinBoard;
-                  taquinBoard = exercise_6b.moveCropImage(oldTaquin.getNumberCrops, oldTaquin.img, gameStarted, listCroppedImageMixed);
+                  taquinBoard = exercise_6b.moveCropImage(oldTaquin.getNumberCrops, oldTaquin.img, gameStarted, listCroppedImageMixed, coordFirstCard, true);
                   buttonsColor = Colors.grey;
                 } else {
                   textButtonGame = "Start Game";
                   gameStarted = false;
+                  coordFirstCard = [0,0];
                   exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(Image.asset("assets/images/avatar.jpg"),
                       1 / 4,
                       1 / 4,
                       listCroppedImage);
                       listCroppedImage = croppedImgConf.listCroppedImage;
-                  taquinBoard = exercise_6b.moveCropImage(numberCrops, img, gameStarted, croppedImgConf.listCroppedImage);
+                  taquinBoard = exercise_6b.moveCropImage(numberCrops, img, gameStarted, croppedImgConf.listCroppedImage, coordFirstCard, true);
                   buttonsColor = Colors.blue;
                 }
               });

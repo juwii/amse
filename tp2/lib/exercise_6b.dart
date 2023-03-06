@@ -7,11 +7,15 @@ class moveCropImage extends StatefulWidget {
   bool gameStarted = true;
   Image img = Image.asset("assets/images/avatar.jpg");
   List<List<Tile>>? listCroppedImage;
+  var coordFirstCard = [0, 0];
+  bool isMixing = false;
 
-  moveCropImage(numberCrops, img, gameStarted, listCroppedImage) {
+  moveCropImage(numberCrops, img, gameStarted, listCroppedImage, coordFirstCard, isMixing) {
     this.numberCrops = numberCrops;
     this.gameStarted = gameStarted;
     this.listCroppedImage = listCroppedImage;
+    this.coordFirstCard = coordFirstCard;
+    this.isMixing = isMixing;
   }
 
   @override
@@ -32,7 +36,9 @@ class _moveCropImage extends State<moveCropImage> {
   List<List<Tile>>? listCroppedImage;
   late exercise_5b.croppedImage croppedImgConf;
   var coordSelectedCard = List.empty();
+  var coordFirstCard = [0,0];
   bool _gameStarted = true;
+  bool isMixing = false;  // variable to determine if the tiles were just mixed
 
   @override
   void initState() {
@@ -40,20 +46,25 @@ class _moveCropImage extends State<moveCropImage> {
     _gameStarted = widget.gameStarted;
     _numberCrops = widget.numberCrops;
     img = widget.img;
+    coordFirstCard = widget.coordFirstCard;
     croppedImgConf = new exercise_5b.croppedImage(img,
         1 / _numberCrops,
         1 / _numberCrops,
         listCroppedImage);
     listCroppedImage = widget.listCroppedImage;
+    isMixing = widget.isMixing;
   }
 
   bool isSwapPossible(int coord1, int coord2, int coord3, int coord4) {
     bool res = false;
+    if(coord1 == coordFirstCard[0] && coord2 == coordFirstCard[1]){
     if ((((coord1 == coord3 - 1) || (coord1 == coord3 + 1)) &&
             (coord2 == coord4)) ||
         (((coord2 == coord4 - 1) || (coord2 == coord4 + 1)) &&
             (coord1 == coord3))) {
       res = true;
+      widget.isMixing = false;  // the coordinates of the selected tile can be updated
+    }
     }
     return res;
   }
@@ -67,6 +78,7 @@ class _moveCropImage extends State<moveCropImage> {
           listCroppedImage[first_index][second_index] =
               listCroppedImage[third_index][fourth_index];
           listCroppedImage[third_index][fourth_index] = temp;
+          coordFirstCard = [third_index, fourth_index];
         }
       });
   }
@@ -75,7 +87,8 @@ class _moveCropImage extends State<moveCropImage> {
   Widget build(BuildContext context) {
     
     _gameStarted = widget.gameStarted;
-    
+    isMixing = widget.isMixing;
+
     // code executed while the user did not swap tiles
     if(!_gameStarted) {
       _numberCrops = widget.numberCrops;
@@ -86,6 +99,11 @@ class _moveCropImage extends State<moveCropImage> {
         listCroppedImage);
       listCroppedImage = widget.listCroppedImage;
     }
+    // code executed before the first move
+    if(isMixing) {
+      coordFirstCard = widget.coordFirstCard;
+    }
+    
     
     return Scaffold(
         body: Column(
@@ -107,10 +125,14 @@ class _moveCropImage extends State<moveCropImage> {
                     padding: const EdgeInsets.all(2.0),
                     child: InkWell(
                       splashColor: Colors.teal[400],
-                      child: listCroppedImage?[
-                              index % listCroppedImage!.length]
-                              [index ~/ listCroppedImage!.length]
-                          .croppedImageTile(),
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        color: (index % listCroppedImage!.length == coordFirstCard[0] && index ~/ listCroppedImage!.length == coordFirstCard[1]) ?  Colors.teal[400] : Colors.white,
+                        child: listCroppedImage?[
+                                index % listCroppedImage!.length]
+                                [index ~/ listCroppedImage!.length]
+                            .croppedImageTile(),
+                      ),
                       onTap: () {
                         setState(() {
                           if (!coordSelectedCard.isEmpty && _gameStarted) {
@@ -155,7 +177,7 @@ class exMoveTiles extends StatelessWidget {
         children: [
           Container(
             height: 500,
-            child: moveCropImage(4, Image.asset("assets/images/avatar.jpg"), true, croppedImgConf.listCroppedImage)
+            child: moveCropImage(4, Image.asset("assets/images/avatar.jpg"), true, croppedImgConf.listCroppedImage, [0,0], false)
           ),
         ],
       ),
