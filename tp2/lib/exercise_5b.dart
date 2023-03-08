@@ -6,20 +6,23 @@ class croppedImage {
   var widthFactor;
   var heightFactor;
   List<List<Tile>>? listCroppedImage;
+  var id = [[]];
 
   void initializeListCroppedImage() {
+      
       listCroppedImage = List.generate((1/this.widthFactor).floor(),
-    (i) => List.generate((1/this.heightFactor).floor(), (j) => new Tile(img: img, x: i*2/(1/widthFactor - 1) - 1, y: j*2/(1/heightFactor - 1) - 1, widthFactor: this.widthFactor, heightFactor: this.heightFactor), growable: true),
+    (i) => List.generate((1/this.heightFactor).floor(), (j) => new Tile(img: img, x: i*2/(1/widthFactor - 1) - 1, y: j*2/(1/heightFactor - 1) - 1, widthFactor: this.widthFactor, heightFactor: this.heightFactor, id: this.id[i][j]), growable: true),
     growable: true);
   }
 
-  croppedImage(this.img, this.widthFactor, this.heightFactor, this.listCroppedImage) {
+  croppedImage(this.img, this.widthFactor, this.heightFactor, this.listCroppedImage, this.id) {
       this.initializeListCroppedImage();
   }
 }
 
 List<List<Tile>>? listCroppedImage;
-croppedImage croppedImg = new croppedImage(Image.asset("assets/images/avatar.jpg"), 0.25, 0.25, listCroppedImage);
+var list_id = List.generate((1/0.25).floor(), (i) => List.generate((1/0.25).floor(), (j) => DateTime.now().millisecondsSinceEpoch));
+croppedImage croppedImg = new croppedImage(Image.asset("assets/images/avatar.jpg"), 0.25, 0.25, listCroppedImage, list_id);
 
 class DisplayGridCroppedImageWidget extends StatelessWidget {
  
