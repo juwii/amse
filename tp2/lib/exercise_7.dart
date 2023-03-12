@@ -40,22 +40,6 @@ class _taquinState extends State<taquin> {
     Emoji('scream', 'U+1F631'),
   ];
 
-  // Function to handle selecting an image from the gallery
-  Future<void> _pickImageFromGallery() async {
-    final pickedImage = await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      img = Image.file(File(pickedImage!.path));
-    });
-  }
-
-  // Function to handle taking a picture with the camera
-  Future<void> _takePicture() async {
-    final pickedImage = await ImagePicker().getImage(source: ImageSource.camera);
-    setState(() {
-      img = Image.file(File(pickedImage!.path));
-    });
-  }
-
   List<List<Tile>>? mixTiles(List<List<Tile>>? listCroppedImage, int difficulty) {
     setState(() {
     int i = 0;
@@ -93,7 +77,7 @@ class _taquinState extends State<taquin> {
   @override
   void initState() {
     list_id = List.generate((numberCrops).floor(), (i) => List.generate((numberCrops).floor(), (j) => uuid.v1()));
-    croppedImgConf = new exercise_5b.croppedImage(Image.asset("assets/images/avatar.jpg"),
+    croppedImgConf = new exercise_5b.croppedImage(img,
         1 / numberCrops,
         1 / numberCrops,
         listCroppedImage,
@@ -114,40 +98,7 @@ class _taquinState extends State<taquin> {
             height: 450,
             child: taquinBoard
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Visibility(
-                visible: !gameStarted,
-                child: SizedBox(
-                  height: 50,
-                  child: TextButton(
-                    child: Icon(Icons.image, size: 50),
-                    onPressed: (){
-                     _pickImageFromGallery;
-                    }
-                    ),
-                ),
-              ),
-              Visibility(
-                visible: !gameStarted,
-                child: SizedBox(
-                  height: 50,
-                  child: TextButton(
-                    child: Icon(Icons.photo_camera, size: 50),
-                    onPressed: (){
-                      _takePicture;
-                     /*  Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: image.chooseImage),
-                      ); */
-                    }
-                    ),
-                ),
-              )
-            ],
-          ),
+          
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -163,7 +114,7 @@ class _taquinState extends State<taquin> {
                           if(!gameStarted && taquinBoard.getNumberCrops <= 10 && taquinBoard.getNumberCrops >= 3) {
                               var oldTaquin = taquinBoard;
                               list_id = List.generate(((oldTaquin.getNumberCrops-1)).floor(), (i) => List.generate(((oldTaquin.getNumberCrops-1)).floor(), (j) => uuid.v1()));
-                              exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(Image.asset("assets/images/avatar.jpg"),
+                              exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(img,
                               1 / (oldTaquin.getNumberCrops-1),
                               1 / (oldTaquin.getNumberCrops-1),
                               listCroppedImage,
@@ -191,7 +142,7 @@ class _taquinState extends State<taquin> {
                          if(!gameStarted && taquinBoard.getNumberCrops <= 9 && taquinBoard.getNumberCrops >= 2) {
                              var oldTaquin = taquinBoard;
                              list_id = List.generate(((oldTaquin.getNumberCrops+1)).floor(), (i) => List.generate(((oldTaquin.getNumberCrops+1)).floor(), (j) => uuid.v1()));
-                             exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(Image.asset("assets/images/avatar.jpg"),
+                             exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(img,
                               1 / (oldTaquin.getNumberCrops+1),
                               1 / (oldTaquin.getNumberCrops+1),
                               listCroppedImage,
@@ -229,7 +180,7 @@ class _taquinState extends State<taquin> {
                         list_id = List.generate((4).floor(), (i) => List.generate((4).floor(), (j) => uuid.v1()));
                         gameStarted = false;
                         coordFirstCard = [0,0];
-                        exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(Image.asset("assets/images/avatar.jpg"),
+                        exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(img,
                             1 / 4,
                             1 / 4,
                             listCroppedImage,

@@ -37,10 +37,6 @@ List Exercices = [
       subtitle: 'Transform an image',
       buildFunc: (context) => Exercice_2.SliderExample()),
   Exercice(
-      title: 'Exercice 3',
-      subtitle: 'Printing of a "tuile"',
-      buildFunc: (context) => Exercice_4.DisplayTileWidget()),
-  Exercice(
       title: 'Exercice 4',
       subtitle: 'Printing of a "tuile"',
       buildFunc: (context) => Exercice_4.DisplayTileWidget()),

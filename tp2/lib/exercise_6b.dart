@@ -6,13 +6,14 @@ import 'exercise_5b.dart' as exercise_5b;
 class moveCropImage extends StatefulWidget {
   var numberCrops = 4;
   bool gameStarted = true;
-  Image img = Image.asset("assets/images/avatar.jpg");
+  late Image img;
   List<List<Tile>>? listCroppedImage;
   var coordFirstCard = [0, 0];
   bool isMixing = false;
   var list_id;
   moveCropImage(numberCrops, img, gameStarted, listCroppedImage, coordFirstCard, isMixing, list_id) {
     this.numberCrops = numberCrops;
+    this.img = img;
     this.gameStarted = gameStarted;
     this.listCroppedImage = listCroppedImage;
     this.coordFirstCard = coordFirstCard;
