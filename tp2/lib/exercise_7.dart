@@ -1,6 +1,10 @@
+//import 'dart:html';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'exercise_4.dart';
 import 'exercise_5c.dart' as exercise_5c;
@@ -35,6 +39,22 @@ class _taquinState extends State<taquin> {
     Emoji('sweat', 'U+1F974'),
     Emoji('scream', 'U+1F631'),
   ];
+
+  // Function to handle selecting an image from the gallery
+  Future<void> _pickImageFromGallery() async {
+    final pickedImage = await ImagePicker().getImage(source: ImageSource.gallery);
+    setState(() {
+      img = Image.file(File(pickedImage!.path));
+    });
+  }
+
+  // Function to handle taking a picture with the camera
+  Future<void> _takePicture() async {
+    final pickedImage = await ImagePicker().getImage(source: ImageSource.camera);
+    setState(() {
+      img = Image.file(File(pickedImage!.path));
+    });
+  }
 
   List<List<Tile>>? mixTiles(List<List<Tile>>? listCroppedImage, int difficulty) {
     setState(() {
@@ -94,7 +114,40 @@ class _taquinState extends State<taquin> {
             height: 450,
             child: taquinBoard
           ),
-          
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Visibility(
+                visible: !gameStarted,
+                child: SizedBox(
+                  height: 50,
+                  child: TextButton(
+                    child: Icon(Icons.image, size: 50),
+                    onPressed: (){
+                     _pickImageFromGallery;
+                    }
+                    ),
+                ),
+              ),
+              Visibility(
+                visible: !gameStarted,
+                child: SizedBox(
+                  height: 50,
+                  child: TextButton(
+                    child: Icon(Icons.photo_camera, size: 50),
+                    onPressed: (){
+                      _takePicture;
+                     /*  Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: image.chooseImage),
+                      ); */
+                    }
+                    ),
+                ),
+              )
+            ],
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
