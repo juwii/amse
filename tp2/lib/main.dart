@@ -7,6 +7,7 @@ import 'exercise_5b.dart' as Exercice_5b;
 import 'exercise_5c.dart' as Exercice_5c;
 import 'exercise_6.dart' as Exercice_6;
 import 'exercise_6b.dart' as Exercice_6b;
+import 'exercise_7.dart' as Exercice_7;
 
 void main() => runApp(TP2());
 
@@ -36,10 +37,6 @@ List Exercices = [
       subtitle: 'Transform an image',
       buildFunc: (context) => Exercice_2.SliderExample()),
   Exercice(
-      title: 'Exercice 3',
-      subtitle: 'Printing of a "tuile"',
-      buildFunc: (context) => Exercice_4.DisplayTileWidget()),
-  Exercice(
       title: 'Exercice 4',
       subtitle: 'Printing of a "tuile"',
       buildFunc: (context) => Exercice_4.DisplayTileWidget()),
@@ -62,7 +59,11 @@ List Exercices = [
   Exercice(
       title: 'Exercice 6b',
       subtitle: 'Move tiles',
-      buildFunc: (context) => Exercice_6b.moveCropImage()),
+      buildFunc: (context) => Exercice_6b.exMoveTiles()),
+  Exercice(
+      title: 'Exercice 7',
+      subtitle: 'Taquin game',
+      buildFunc: (context) => Exercice_7.taquin()),
 ];
 
 class TP2_Exercices extends StatelessWidget {

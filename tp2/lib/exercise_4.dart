@@ -6,8 +6,9 @@ class Tile {
   var heightFactor;
   var x;  // coordinate of the crop in x axis
   var y;  // coordinate of the crop in y axis
+  var id;
 
-  Tile({required this.img, this.x, this.y, required this.widthFactor, required this.heightFactor});
+  Tile({required this.img, this.x, this.y, required this.widthFactor, required this.heightFactor, this.id});
 
   Widget croppedImageTile() {
     return FittedBox(

@@ -14,7 +14,8 @@ class _configureCropImage extends State<configureCropImage> {
   @override
   Widget build(BuildContext context) {
     List<List<Tile>>? listCroppedImage;
-    exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(Image.asset("assets/images/avatar.jpg"), 1/_numberCrops, 1/_numberCrops, listCroppedImage);
+    var list_id = List.generate((_numberCrops).floor(), (i) => List.generate((_numberCrops).floor(), (j) => DateTime.now().millisecondsSinceEpoch));
+    exercise_5b.croppedImage croppedImgConf = new exercise_5b.croppedImage(Image.asset("assets/images/avatar.jpg"), 1/_numberCrops, 1/_numberCrops, listCroppedImage, list_id);
     return Scaffold(
         appBar: AppBar(
           title: Text('Configure the number of crops'),
